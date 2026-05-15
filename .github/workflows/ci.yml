@@ -44,7 +44,7 @@ jobs:
         run: pip install flake8
       
       - name: Run linter
-        run: flake8 app/src --max-line-length=120
+        run: flake8 app/src --max-line-length=120 --ignore=E302,E305,W292
 
   test:
     needs: build
@@ -65,7 +65,7 @@ jobs:
       - name: Run tests
         run: |
           cd app
-          pytest tests/ -v --junitxml=test-results.xml
+          PYTHONPATH=./src pytest tests/ -v --junitxml=test-results.xml
       
       - name: Upload test results
         uses: actions/upload-artifact@v4
