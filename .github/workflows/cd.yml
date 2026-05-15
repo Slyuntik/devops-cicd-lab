@@ -1,0 +1,40 @@
+name: CD Pipeline
+
+on:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types:
+      - completed
+    branches: [main]
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Get image tag
+        run: echo "IMAGE_TAG=$(curl -s https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }}/artifacts | jq -r '.artifacts[0].name')" >> $GITHUB_ENV
+      
+      - name: Simulate staging deployment
+        run: |
+          echo "Deploying ghcr.io/${{ github.repository }}@sha256:fake (would use $IMAGE_TAG)"
+          echo "Deployment to staging successful"
+
+  smoke-test:
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Simulate smoke test
+        run: |
+          echo "Running smoke tests against staging"
+          echo "All smoke tests passed"
+
+  deploy-production:
+    needs: smoke-test
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Simulate production deployment
+        run: |
+          echo "Deploying to production after manual approval"
+          echo "Deployment successful"
