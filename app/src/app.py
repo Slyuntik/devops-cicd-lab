@@ -4,6 +4,7 @@ from flask import Flask, jsonify
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def index():
     return jsonify({
@@ -12,9 +13,11 @@ def index():
         "hostname": socket.gethostname()
     })
 
+
 @app.route('/health')
 def health():
     return jsonify({"status": "ok"})
+
 
 @app.route('/greeting')
 def greeting():
@@ -22,6 +25,7 @@ def greeting():
     if flag:
         return jsonify({"message": "Hello from new feature!"})
     return jsonify({"message": "Hello, world!"})
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
