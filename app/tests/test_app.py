@@ -34,4 +34,4 @@ def test_greeting_without_feature_flag(client):
 def test_greeting_with_feature_flag(client, monkeypatch):
     monkeypatch.setenv('FEATURE_NEW_GREETING', 'true')
     rv = client.get('/greeting')
-    assert rv.json['message'] == 'Hello from new feature!')
+    assert rv.json['message'] == 'Hello from new feature!'
